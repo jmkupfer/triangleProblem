@@ -1,0 +1,72 @@
+import java.util.*;
+
+public class PFdriver {
+
+	public static void main(String[] args) {
+		Scanner stdIn = new Scanner(System.in);
+		ArrayList<Integer> primeList = new ArrayList<>();
+		System.out.print("Input min positive integer to check: ");
+		int min = stdIn.nextInt();
+		System.out.print("Inptu max postive integer to check: ");
+		int max = stdIn.nextInt();
+		for (int i=min; i<=max; i++) {
+			System.out.println(i + ": " + primeFactorization(i, primeList));
+		}
+		
+		
+		
+		
+		stdIn.close();
+	}
+	
+	public static ArrayList<Integer> primeFactorization(int x, ArrayList<Integer> primeList) {
+		while (primeList.size()==0 || primeList.get(primeList.size()-1)<x) {
+			nextPrime(primeList);
+			//System.out.println("Prime List:" + primeList);
+		}
+		ArrayList<Integer> pf = new ArrayList<>();
+		if (isPrime(x, primeList)) {
+			pf.add(x);
+		} else {
+			while (x!=1) {
+				int bestIndex = 0;
+				for (int i=bestIndex; i<primeList.size(); i++) {
+					if (x % primeList.get(i)==0) {
+						pf.add(primeList.get(i));
+						x /= primeList.get(i);
+						bestIndex = i;
+						if (x<1) {
+							System.out.println("SOMETHING WENT WRONG!");
+						}
+						break;
+					}
+				}
+			}		
+		}
+		return pf;
+	}
+	
+	public static void nextPrime(ArrayList<Integer> primeList) {
+		if (primeList.size()==0) {
+			primeList.add(2);
+		} else {
+			boolean primeFound = false;
+			int i;
+			for (i=primeList.get(primeList.size()-1)+1; !primeFound; i++) {
+				primeFound = isPrime(i, primeList);
+			}
+			primeList.add(i-1);
+		}
+	}
+	
+	public static boolean isPrime(int x, ArrayList<Integer> primeList) {
+		//System.out.println("PRIME CHECK: " + x);
+		for (int n: primeList) {
+			if (x % n == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+}
